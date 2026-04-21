@@ -21,40 +21,38 @@ public class Fraccion {
         this.denominador = (int) denominador;
     }
 
-    // public static Fraccion decimalToFraction(float operando) { //Falta la
-    // implementacion de la calculadora
+    public static Fraccion decimalToFraction(float operando) {// ! Pueden haber inconsistencias por la falta de
+                                                              // presicion de float. Tener en cuanta pasar de float a
+                                                              // BigInteger o BigDecimial
 
-    // if (operando == 0) {
-    // return new Fraccion(0, 1);
-    // }
+        if (operando == 0.0) {
+            return new Fraccion(0, 1);
+        }
+        Fraccion fractionReturned;
+        int parteEntera = (int) operando;
+        float parteDecimal = operando - parteEntera;
 
-    // Fraccion fractionReturned;
-    // float parteDecimal; // los va a volver una fraccion entre si
-    // int parteEntera;
+        if (parteDecimal != 0) {
+            float aux = 100 / parteDecimal;
+            Fraccion fraccionParteDecimal = new Fraccion(100, aux).simplicarFraccion();
 
-    // parteEntera = (int) operando;
-    // parteDecimal = operando - parteEntera;
+            if (parteEntera != 0) {
+                Fraccion fraccionParteEntera = new Fraccion(Math.abs(parteEntera), 1);
+                fractionReturned = new Fraccion(
+                        (fraccionParteDecimal.getNumerador() + fraccionParteEntera.getNumerador()) * (Math
+                                .abs(parteEntera)
+                                / parteEntera),
+                        fraccionParteDecimal.getDenominador() + fraccionParteEntera.getDenominador());
+            }
+            fractionReturned = fraccionParteDecimal;
+        } else {
+            Fraccion fraccionParteEntera = new Fraccion(parteEntera, 1);
 
-    // if (parteDecimal != 0) {
-    // float aux = 100 / parteDecimal;
-    // Fraccion fraccionParteDecimal = new Fraccion(100, aux);// Nueva fraccion con
-    // la parte decimal
-    // if (parteEntera != 0) {
-    // Fraccion fraccionParteEntera = new Fraccion(Math.abs(parteEntera), 1);
-    // // return fractionReturned = fraccionParteDecimal + fraccionParteEntera *
-    // // (Math.abs(parteEntera) / parteEntera); //Falta la implementacion
+            fractionReturned = fraccionParteEntera;
+        }
 
-    // }
-    // fractionReturned = fraccionParteDecimal;
-    // return fractionReturned;
-    // } else if (parteEntera != 0) {
-    // Fraccion fraccionParteEntera = new Fraccion(parteEntera, 1);
-
-    // fractionReturned = fraccionParteEntera;
-    // return fractionReturned;
-    // }
-
-    // }
+        return fractionReturned;
+    }
 
     private void validarDenominadorNulo(float denominador) {
         if (denominador == 0) {
