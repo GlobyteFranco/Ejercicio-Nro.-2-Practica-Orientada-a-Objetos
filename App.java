@@ -9,7 +9,7 @@ public class App {
         float operandB = sc.nextFloat();
 
         while (operandA != 0 || operandB != 0) {
-            System.out.println("La fraccion obtenida es" + new Fraccion(operandA, operandB));
+            System.out.println("La fraccion obtenida es" + new Fraccion(operandA, operandB).simplicarFraccion());
             operandA = sc.nextFloat();
             operandB = sc.nextFloat();
         }

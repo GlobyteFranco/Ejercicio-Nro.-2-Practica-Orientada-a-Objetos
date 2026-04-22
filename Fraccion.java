@@ -13,16 +13,9 @@ public class Fraccion {
         this.denominador = denominador;
     }
 
-    public Fraccion(float numerador, float denominador) { // Necesita que decimalToFraction este habilitado ademas de
-                                                          // agregarla mas logica
-        validarDenominadorNulo(denominador);
-        Fraccion fraccionNumerador = decimalToFraction(numerador);
-        Fraccion fraccionDenominador = decimalToFraction(denominador);
-        // TODO: Considerar hacerlo simplemente multiplicando y dividiendo por el margen
-        // de precision (10^-2)
-        // !No puede guardar el contexto si lo cambia por cada llamada recursiva
-        this.numerador = fraccionNumerador.getNumerador() * fraccionDenominador.getDenominador();
-        this.denominador = fraccionDenominador.getNumerador() * fraccionNumerador.getDenominador();
+    public Fraccion(float numerador, float denominador) {
+        this((int) (numerador * 100), (int) (denominador * 100));
+
     }
 
     public static Fraccion decimalToFraction(float operando) {
@@ -70,9 +63,7 @@ public class Fraccion {
     public Fraccion simplicarFraccion() {
         int valorMCD = mcd(this.numerador, this.denominador);
 
-        // return new Fraccion(this.numerador / valorMCD, this.denominador / valorMCD);
-        // //! Aca esta el problema
-        return new Fraccion(6, 7);
+        return new Fraccion(this.numerador / valorMCD, this.denominador / valorMCD);
     }
 
     public int mcd(int a, int b) {
