@@ -16,14 +16,16 @@ public class Fraccion {
     public Fraccion(float numerador, float denominador) { // Necesita que decimalToFraction este habilitado ademas de
                                                           // agregarla mas logica
         validarDenominadorNulo(denominador);
-
-        this.numerador = (int) numerador;
-        this.denominador = (int) denominador;
+        Fraccion fraccionNumerador = decimalToFraction(numerador);
+        Fraccion fraccionDenominador = decimalToFraction(denominador);
+        // TODO: Considerar hacerlo simplemente multiplicando y dividiendo por el margen
+        // de precision (10^-2)
+        // !No puede guardar el contexto si lo cambia por cada llamada recursiva
+        this.numerador = fraccionNumerador.getNumerador() * fraccionDenominador.getDenominador();
+        this.denominador = fraccionDenominador.getNumerador() * fraccionNumerador.getDenominador();
     }
 
-    public static Fraccion decimalToFraction(float operando) {// ! Pueden haber inconsistencias por la falta de
-                                                              // presicion de float. Tener en cuanta pasar de float a
-                                                              // BigInteger o BigDecimial
+    public static Fraccion decimalToFraction(float operando) {
 
         if (operando == 0.0) {
             return new Fraccion(0, 1);
@@ -35,23 +37,28 @@ public class Fraccion {
         if (parteDecimal != 0) {
             float aux = 100 / parteDecimal;
             Fraccion fraccionParteDecimal = new Fraccion(100, aux).simplicarFraccion();
-
-            if (parteEntera != 0) {
-                Fraccion fraccionParteEntera = new Fraccion(Math.abs(parteEntera), 1);
-                fractionReturned = new Fraccion(
-                        (fraccionParteDecimal.getNumerador() + fraccionParteEntera.getNumerador()) * (Math
-                                .abs(parteEntera)
-                                / parteEntera),
-                        fraccionParteDecimal.getDenominador() + fraccionParteEntera.getDenominador());
-            }
             fractionReturned = fraccionParteDecimal;
+            if (parteEntera != 0) {
+                System.out.println("Fraccion parte decimal encontrada: " + fraccionParteDecimal);
+
+                Fraccion fraccionParteEntera = new Fraccion(Math.abs(parteEntera), 1);
+                System.out.println("Fraccion parte entera encontrada: " + fraccionParteEntera);
+                int auxProductoDenominadores = fraccionParteDecimal.getDenominador()
+                        * fraccionParteEntera.getDenominador();
+                fractionReturned = new Fraccion(
+                        (fraccionParteDecimal.getNumerador() * fraccionParteEntera.getDenominador()
+                                + fraccionParteEntera.getNumerador() * fraccionParteDecimal.getDenominador())
+                                * (Math.abs(parteEntera) / parteEntera),
+                        auxProductoDenominadores);
+            }
+
         } else {
             Fraccion fraccionParteEntera = new Fraccion(parteEntera, 1);
 
             fractionReturned = fraccionParteEntera;
         }
 
-        return fractionReturned;
+        return fractionReturned.simplicarFraccion();
     }
 
     private void validarDenominadorNulo(float denominador) {
@@ -63,7 +70,9 @@ public class Fraccion {
     public Fraccion simplicarFraccion() {
         int valorMCD = mcd(this.numerador, this.denominador);
 
-        return new Fraccion(this.numerador / valorMCD, this.denominador / valorMCD);
+        // return new Fraccion(this.numerador / valorMCD, this.denominador / valorMCD);
+        // //! Aca esta el problema
+        return new Fraccion(6, 7);
     }
 
     public int mcd(int a, int b) {

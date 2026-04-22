@@ -6,12 +6,14 @@ public class App {
         System.out.println(
                 "Ingrese el valor a convertir en fraccion. \n Tenga en cuenta que solo debe ingresar un valor con decimales para que se haga la conversion");
         float operandA = sc.nextFloat();
-        do {
-            System.out.println(
-                    "El valor elegido es el siguiente: \n\n " + Fraccion.decimalToFraction(operandA) + "\n\n");
-            System.out.println("Por favor ingrese otro valor");
+        float operandB = sc.nextFloat();
+
+        while (operandA != 0 || operandB != 0) {
+            System.out.println("La fraccion obtenida es" + new Fraccion(operandA, operandB));
             operandA = sc.nextFloat();
-        } while (operandA != 0);
+            operandB = sc.nextFloat();
+        }
+        ;
         sc.close();
         System.out.println(
                 "Programa terminado. \n Muchas gracias por probarlo!!!");
